@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/icon.png" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: #606060;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw !important;
+            height: 100vh !important;
+        }
+    </style>
+    <title>Portfolio</title>
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"
+        integrity="sha512-2r+xZ/Dm8+HI0I8dsj1Jlfchv4O3DGfWbqRalmSGtgdbVQrZyGRqHp9ek8GKk1x8w01JsmDZRrJZ4DzgXkAU+g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"
+        integrity="sha512-0z8URjGET6GWnS1xcgiLBZBzoaS8BNlKayfZyQNKz4IRp+s7CKXx0yz7Eco2+TcwoeMBa5KMwmTX7Kus7Fa5Uw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        let costomFont=loadFont("/fonts/long.otf");
+        function preLoad() {
+            customFont = loadFont("/fonts/long.otf");
+        }
+        const Engine = Matter.Engine;
+        const World = Matter.World;
+        const Bodies = Matter.Bodies;
+        const Body = Matter.Body;
+        let engine;
+        let words = [];
+        let ground, wallLeft, wallRight;
+        let wordsToDisplay = [
+            "Facebook",
+            "Instagram",
+            "Twitter",
+            "LinkedIn", 
+            "Email",
+            "Discord",
+            "YouTube",
+        ];
+        function setup() {
+            createCanvas(windowWidth, windowHeight-60);
+            engine = Engine.create();
+            ground = Bodies.rectangle(width / 2, height-20, width, 10, {
+                isStatic: true,
+            });
+            wallLeft= Bodies.rectangle(0, height / 2, 10, height, {
+                isStatic: true,
+            });
+            wallRight = Bodies.rectangle(width, height / 2, 10, height, {
+                isStatic: true,
+            });
+            World.add(engine.world, [ground, wallLeft, wallRight]);
+            for (let i = 0; i < wordsToDisplay.length; i++) {
+                words.push(new Word(random(width), -200, wordsToDisplay[i]));
+            }
+        }
+        function draw() {
+            background("#606060");
+            Engine.update(engine);
+            for (let word of words) {
+                word.show();
+            }
+        }
+        class Word {
+            constructor(x, y, word) {
+                this.body = Bodies.rectangle(x, y, word.length * 20, 40);
+                this.word = word;
+                World.add(engine.world, this.body);
+            }
+            show() {
+                let pos = this.body.position;
+                let angle = this.body.angle;
+                push();
+                translate(pos.x, pos.y);
+                rotate(angle);
+                rectMode(CENTER);
+                fill(255);
+                stroke("#0f0f0f");
+                strokeWeight(3);
+                rect(0, 0, this.word.length * 40 + 80, 100, 60);
+                noStroke();
+                textFont(customFont);
+                fill("#0f0f0f");
+                textSize(40);
+                textAlign(CENTER, CENTER);
+                text(this.word.toUpperCase(), 0, 0);
+                pop();
+            }
+        }
+        function mouseMoved() {
+            for (let word of words) {
+                if (
+                    dist(mouseX, mouseY, word.body.position.x, word.body.
+                        position.y) <50) {
+                        Body.applyForce(
+                        word.body,
+                        { x: word.body.position.x, y: word.body.position.y },
+                        { x: random(-0.2, 0.2), y: random(-0.2, 0.2) }
+                    );
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

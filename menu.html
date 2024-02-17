@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/icon1.png" type="image/x-icon">
+    <style>
+        @font-face {
+            font-family: ar;
+            src: url('/fonts/Mazius-Extraitalic.121a71a7.otf');
+        }
+        *{
+            padding: 0;margin: 0;
+        }
+        :root {
+            --bg: #e0e0e0;
+            --primary: #14CF93;
+            --secondary: #222222;
+        }
+
+        #pagecha {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg);
+        }
+        #container51 {
+            z-index: 10;
+            width: 75%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        #container51 a{
+            font-family: ar;
+        }
+        .text {
+            text-decoration: none;
+            font-family: Gilroy bold;
+            font-size: 78px;
+            color: var(--secondary);
+            height: 80px;
+            overflow: hidden;
+        }
+        .text:hover .letter,
+        .text.play .letter {
+            transform: translateY(-100%);
+        }
+
+        .text .block:last-child {
+            color: var(--primary);
+        }
+        .text .letter {
+            display: inline-block;
+            transition: transform 0.5s cubic-bezier(0.76, 0, 0.024, 1);
+        }
+        /*.letter:nth-child(1){
+    transition-delay:0s ;
+}
+.letter:nth-child(2){
+    transition-delay:0.3s ;
+}
+.letter:nth-child(3){
+    transition-delay:0.6s ;
+}
+.letter:nth-child(4){
+    transition-delay:0.9s ;
+}
+.letter:nth-child(5){
+    transition-delay:0.12s ;
+}
+.letter:nth-child(6){
+    transition-delay:0.15s ;
+}
+.letter:nth-child(7){
+    transition-delay:0.18s ;
+}
+.letter:nth-child(8){
+    transition-delay:0.21s ;
+} 
+        .letter:nth-child(9){
+    transition-delay:0.24s ;
+}
+.letter:nth-child(10){
+    transition-delay:0.27s ;
+}
+.letter:nth-child(11){
+    transition-delay:0.3s ;
+} */
+#gooey {
+    height: 25vw;
+    width: 25vw;
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(to top right, #14CF93, #14Cf70);
+    /* background: linear-gradient(to top right,red,blue); */
+    top: 25%;
+    left: 38%;
+    filter: blur(20px);
+    animation-name: gooey;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    opacity: .7;
+    animation-timing-function: ease-in-out;
+
+}
+
+@keyframes gooey {
+    from {
+        filter: blur(20px);
+        transform: translate(10%, -10%) skew(0);
+    }
+
+    to {
+        filter: blur(30px);
+        transform: translate(-10%, 10%) skew(-12deg);
+    }
+}
+
+    </style>
+    <title>Menu</title>
+</head>
+
+<body>
+    <div id="pagecha">
+        <div id="container51">
+            <a href="main.html" class="text">Home</a>
+            <a href="projects.html" class="text">Projects</a>
+            <a href="404.html" class="text">Ideas</a>
+            <a href="collections.html" class="text">Collections</a>
+            <a href="4041.html" class="text">About Us</a>
+            <a href="portfolio.html" class="text">Portfolio</a>
+        </div>
+        <div id="gooey">
+        </div>
+    </div>
+    <script>
+        let elements = document.querySelectorAll(".text")
+        elements.forEach((element) => {
+            let innerText = element.innerText
+            element.innerHTML = ""
+            let textcontainer = document.createElement("div")
+            textcontainer.classList.add("block")
+
+            for (let letter of innerText) {
+                let span = document.createElement("span")
+                span.innerHTML = letter.trim() === "" ? "\xa0" : letter
+                span.classList.add("letter")
+                textcontainer.appendChild(span)
+            }
+            element.appendChild(textcontainer)
+            element.appendChild(textcontainer.cloneNode(true))
+        })
+        elements.forEach((element) => {
+            element.addEventListener("mouseover", () => {
+                element.classList.remove("play")
+            })
+        })
+
+    </script>
+</body>
+
+</html>
